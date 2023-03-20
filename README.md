@@ -1,1 +1,1 @@
-# kata
+# Kata: Daily training
