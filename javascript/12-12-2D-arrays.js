@@ -30,36 +30,37 @@ function readLine() {
  */
 
 function hourglassSum(arr) {
-    const glass = [];
-    for(let i = 0; i < arr.length; i++){
-        for(let j = 0; j < arr[i].length; j++){
-            if((i < arr.length - 2 ) && (j < arr[i].length - 2)){
-                const newArray = [];
-                for(let k = 0; k < 3; k++){
-                    for(let h = 0; h < 3; h++){
-                        if(k === 1 && h === 0)continue;
-                        if(k === 1 && h === 2)continue;
-                        newArray.push(
-                            arr[i+k][j+h]
-                        );
+    const length = arr.length; // Store the length of the input array
+    const hourglassSums = []; // Array to store the sums of hourglasses
+
+    // Iterate through the rows of the array, excluding the last two rows
+    for (let i = 0; i < length - 2; i++) {
+        // Iterate through the columns of the array, excluding the last two columns
+        for (let j = 0; j < length - 2; j++) {
+            let hourglassSum = 0; // Variable to accumulate the sum of the current hourglass
+
+            // Nested loops to traverse each element of the 3x3 hourglass centered at (i, j)
+            for (let k = 0; k < 3; k++) {
+                for (let l = 0; l < 3; l++) {
+                    // Exclude unwanted elements in the middle row, except for the middle element
+                    if (!(k === 1 && l !== 1)) {
+                        hourglassSum += arr[i + k][j + l]; // Accumulate valid elements into hourglassSum
                     }
                 }
-                glass.push(newArray)
             }
+
+            // Store the calculated sum of the current hourglass in the array
+            hourglassSums.push(hourglassSum);
         }
     }
-    
-    const reducedGlass = glass
-        .reduce((acc, e) => {
-            const sum = e.reduce((acc, el) => el+acc, 0);
-            return [...acc, sum];
-        },[])
-    
-    console.log(reducedGlass);
-    
-    return reducedGlass
-        .reduce((acc, e) => e > acc ? e : acc, 0)
+
+    // Find the maximum value among the sums of hourglasses
+    const maxSum = Math.max(...hourglassSums);
+
+    // Return the maximum sum as the result
+    return maxSum;
 }
+
 
 function main() {
     const ws = fs.createWriteStream(process.env.OUTPUT_PATH);
